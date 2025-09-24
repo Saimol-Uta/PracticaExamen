@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../lib/jquery.js"></script>
+    <title>Document</title>
+
+</head>
+<style>
+    div {
+        margin: 20px;
+    }
+
+    button {
+        margin-left: 5px;
+        background-color: aquamarine;
+    }
+
+    table,
+    thead {
+        border: 1px solid black;
+        border-collapse: collapse;
+
+        text-align: center;
+    }
+
+    th,
+    td {
+        border: 1px solid black;
+        padding: 8px;
+    }
+
+    th {
+        background-color: lightblue;
+    }
+</style>
+
+<body>
+    <h1>Formulario para ingresar y editar</h1>
+    <form action="">
+        <div>
+            <label for="">ID</label>
+            <input type="text" id="id">
+        </div>
+        <div>
+            <label for="">Nombre</label>
+            <input type="text" id="nombre">
+        </div>
+        <div>
+            <label for="">Cantidad</label>
+            <input type="text" id="cantidad">
+        </div>
+        <div>
+            <label for="">Precio</label>
+            <input type="text" id="precio">
+        </div>
+    </form>
+
+    <div>
+        <button id="editar">Editar</button>
+        <button id="ingresar">Ingresar</button>
+        <button id="eliminar">Eliminar</button>
+
+        <button id="listar">Listar</button>
+    </div>
+
+    <div>
+        <h3>buscar:</h3>
+        <input type="text" id="buscarId">
+        <button id="buscar">buscar</button>
+    </div>
+
+    <h4>Lista de Productos</h4>
+    <div id="ListaProductos"></div>
+
+</body>
+
+
+
+</html>
+
+<script>
+
+    const urlApi = "http://localhost/Servicios/PracticaExamen/controller/ApiProducto.php";
+
+    function limpiarFormulario() {
+        $("#id").val("");
+        $("#nombre").val("");
+        $("#cantidad").val("");
+        $("#precio").val("");
+    }
+
+    function listar() {
+        $.ajax({
+            url: urlApi,
+            method: "GET",
+            dataType: "json",
+            success: function (data) {
+                let html = `
+                    <table>
+                        <thead>
+                            <tr>
+                            <th>id</th>
+                            <th>nombre</th>
+                            <th>cantidad</th>
+                            <th>precio</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                `;
+                console.log("si entro al select");
+
+                data.forEach(
+                    function (producto) {
+                        html += `
+                        <tr>
+                          <td>${producto.id}</td>
+                            <td>${producto.nombre}</td>
+                            <td>${producto.cantidad}</td>
+                            <td>${producto.precio}</td>
+                        </tr>
+                        
+                        `;
+                    }
+                );
+
+                html += `</tbody>
+                        </table>`;
+
+                $("#ListaProductos").html(html);
+
+
+            }
+
+        });
+    }
+
+    $("#listar").click(() => {
+        listar();
+    })
+
+    listar();
+
+    $("#buscar").click(() => {
+        $.ajax({
+            url: urlApi + "?id=" + $("#buscarId").val(),
+            method: "GET",
+            dataType: "json",
+            success: function (data) {
+                let html = `
+                    <table>
+                        <thead>
+                            <tr>
+                            <th>id</th>
+                            <th>nombre</th>
+                            <th>cantidad</th>
+                            <th>precio</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                `;
+                data.forEach(
+                    function (producto) {
+                        html += `
+                        <tr>
+                          <td>${producto.id}</td>
+                            <td>${producto.nombre}</td>
+                            <td>${producto.cantidad}</td>
+                            <td>${producto.precio}</td>
+                        </tr>
+                        
+                        `;
+                    }
+                );
+
+                html += `</tbody>
+                        </table>`;
+
+                $("#ListaProductos").html(html);
+                limpiarFormulario();
+            }
+
+        });
+    });
+
+    $("#ingresar").click(() => {
+        $.ajax({
+            url: urlApi,
+            method: "POST",
+            dataType: "json",
+            data: {
+                id: $("#id").val(),
+                nombre: $("#nombre").val(),
+                cantidad: $("#cantidad").val(),
+                precio: $("#precio").val()
+            },
+            success: function (data) {
+                if (data) {
+                    listar();
+                } else {
+                    alert("Error al ingresar estudiante");
+                }
+            }
+        });
+    });
+
+    $("#eliminar").click(() => {
+        $.ajax({
+            url: urlApi + "?id=" + $("#id").val(),
+            method: "DELETE",
+            dataType: "json",
+            success: function (data) {
+                if (data) {
+                    listar();
+                } else {
+                    alert("Error al eliminar estudiante");
+                }
+                limpiarFormulario();
+            }
+        });
+    });
+
+    $("#editar").click(() => {
+        $.ajax({
+            url: urlApi + "?id=" + $("#id").val() + "&nombre=" + $("#nombre").val() + "&cantidad=" + $("#cantidad").val() + "&precio=" + $("#precio").val(),
+            method: "PUT",
+            dataType: "json",
+
+            success: function (data) {
+                if (data) {
+                    listar();
+                } else {
+                    alert("Error al editar estudiante");
+                }
+                limpiarFormulario();
+            }
+        });
+    });
+
+</script>
