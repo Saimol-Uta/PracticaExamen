@@ -1,0 +1,25 @@
+<?php
+include_once "conexion.php";
+class CrudStudent {
+
+    public static function insert()
+    {
+    
+
+    }
+
+    public static function create()
+    {
+    
+    }
+
+    public static function select()
+    {
+    
+    }
+
+    public static function delete(){
+
+    }
+
+}

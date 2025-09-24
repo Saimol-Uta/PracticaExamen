@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="jquery.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="estudiantes">
+        <!-- Aquí se cargarán los estudiantes -->
+
+    </div>
+</body>
+
+</html>
+
+<script>
+
+    const api_url = 'http://localhost/Servicios/PracticaExamen/api.php';
+
+
+    // Función para cargar los datos de los estudiantes
+    function cargardatos() {
+        $.ajax({
+            url: api_url,
+            method: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                // Mostrar los estudiantes en una tabla
+                //primero creamos la tabla y luego llenamos los datos
+                let html = "<table border='1'><thead><tr><th>cedula</th><th>nombre</th><th>apellido</th><th>direccion</th><th>direccion</th></tr></thead> </tabla>";
+                let html1 = "<table border='1' cellpadding='8' style='border-collapse:collapse;width:100%;'><thead><tr><th>Cédula</th><th>Nombre</th><th>Apellido</th><th>Dirección</th><th>Teléfono</th></tr></thead><tbody>";
+                data.forEach(
+                    function (estudiante) {
+                        html += `
+                        <tr>
+                          <td>${estudiante.cedula}</td>
+                            <td>${estudiante.nombre}</td>
+                            <td>${estudiante.apellido}</td>
+                            <td>${estudiante.direccion}</td>
+                            <td>${estudiante.telefono}</td>
+                        </tr>
+                        
+                        `;
+                    }
+                );
+
+                html += "</tbody></table>";
+
+                $("#estudiantes").html(html);
+            }
+        })
+
+    }
+
+    cargardatos();
+
+</script>
