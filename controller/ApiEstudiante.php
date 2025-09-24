@@ -1,5 +1,5 @@
 <?php
-include_once "./model/crudStudent.php";
+include_once "../model/crudStudent.php";
 
 $opc = $_SERVER["REQUEST_METHOD"];
 

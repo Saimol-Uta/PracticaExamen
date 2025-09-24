@@ -4,12 +4,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../jquery.js"></script>
     <title>Document</title>
-    <script src="../lib/jquery.js"></script>
+
 </head>
 <style>
     div {
         margin: 20px;
+    }
+
+    button {
+        margin-left: 5px;
+        background-color: aquamarine;
+    }
+
+    table,
+    thead {
+        border: 1px solid black;
+        border-collapse: collapse;
+
+        text-align: center;
+    }
+
+    th,
+    td {
+        border: 1px solid black;
+        padding: 8px;
+    }
+
+    th {
+        background-color: lightblue;
     }
 </style>
 
@@ -39,11 +63,83 @@
     </form>
 
     <div>
-        <button>Editar</button>
+        <button id="editar">Editar</button>
+        <button id="ingresar">Ingresar</button>
+        <button id="eliminar">Eliminar</button>
+
+        <button id="listar">Listar</button>
     </div>
 
+    <div>
+        <h3>buscar:</h3>
+        <input type="text">
+        <button id="buscar">buscar</button>
+    </div>
+
+    <h4>Lista de Estudiante</h4>
     <div id="ListaEstudiante"></div>
 
 </body>
 
+
+
 </html>
+
+<script>
+
+    const urlApi = "http://localhost/Servicios/PracticaExamen/controller/ApiEstudiante.php";
+
+    function listar() {
+        $.ajax({
+            url: urlApi,
+            method: "GET",
+            dataType: "json",
+            success: function (data) {
+                let html = `
+                    <table>
+                        <thead>
+                            <tr>
+                            <th>cedula</th>
+                            <th>nombre</th>
+                            <th>apellido</th>
+                            <th>direccion</th>
+                            <th>telefono</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                `;
+                console.log("si entro al select");
+
+                data.forEach(
+                    function (estudiante) {
+                        html += `
+                        <tr>
+                          <td>${estudiante.cedula}</td>
+                            <td>${estudiante.nombre}</td>
+                            <td>${estudiante.apellido}</td>
+                            <td>${estudiante.direccion}</td>
+                            <td>${estudiante.telefono}</td>
+                        </tr>
+                        
+                        `;
+                    }
+                );
+
+                html += `</tbody>
+                        </table>`;
+
+                $("#ListaEstudiante").html(html);
+
+            }
+
+        });
+    }
+
+    $("#listar").click(() => {
+        listar();
+    })
+
+    listar();
+
+</script>
