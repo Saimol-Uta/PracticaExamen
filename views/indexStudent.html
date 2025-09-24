@@ -72,7 +72,7 @@
 
     <div>
         <h3>buscar:</h3>
-        <input type="text">
+        <input type="text" id="buscarCedula">
         <button id="buscar">buscar</button>
     </div>
 
@@ -141,5 +141,49 @@
     })
 
     listar();
+
+    $("#buscar").click(() => {
+        $.ajax({
+            url: urlApi + "?cedula=" + $("#buscarCedula").val(),
+            method: "GET",
+            dataType: "json",
+            success: function (data) {
+                let html = `
+                    <table>
+                        <thead>
+                            <tr>
+                            <th>cedula</th>
+                            <th>nombre</th>
+                            <th>apellido</th>
+                            <th>direccion</th>
+                            <th>telefono</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                `;
+                data.forEach(
+                    function (estudiante) {
+                        html += `
+                        <tr>
+                          <td>${estudiante.cedula}</td>
+                            <td>${estudiante.nombre}</td>
+                            <td>${estudiante.apellido}</td>
+                            <td>${estudiante.direccion}</td>
+                            <td>${estudiante.telefono}</td>
+                        </tr>
+                        
+                        `;
+                    }
+                );
+
+                html += `</tbody>
+                        </table>`;
+
+                $("#ListaEstudiante").html(html);
+            }
+
+        });
+    });
 
 </script>
