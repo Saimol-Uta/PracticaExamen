@@ -89,6 +89,14 @@
 
     const urlApi = "http://localhost/Servicios/PracticaExamen/controller/ApiEstudiante.php";
 
+    function limpiarFormulario() {
+        $("#cedula").val("");
+        $("#nombre").val("");
+        $("#apellido").val("");
+        $("#direccion").val("");
+        $("#telefono").val("");
+    }
+
     function listar() {
         $.ajax({
             url: urlApi,
@@ -130,6 +138,7 @@
                         </table>`;
 
                 $("#ListaEstudiante").html(html);
+
 
             }
 
@@ -181,8 +190,64 @@
                         </table>`;
 
                 $("#ListaEstudiante").html(html);
+                limpiarFormulario();
             }
 
+        });
+    });
+
+    $("#ingresar").click(() => {
+        $.ajax({
+            url: urlApi,
+            method: "POST",
+            dataType: "json",
+            data: {
+                cedula: $("#cedula").val(),
+                nombre: $("#nombre").val(),
+                apellido: $("#apellido").val(),
+                direccion: $("#direccion").val(),
+                telefono: $("#telefono").val()
+            },
+            success: function (data) {
+                if (data) {
+                    listar();
+                } else {
+                    alert("Error al ingresar estudiante");
+                }
+            }
+        });
+    });
+
+    $("#eliminar").click(() => {
+        $.ajax({
+            url: urlApi + "?cedula=" + $("#cedula").val(),
+            method: "DELETE",
+            dataType: "json",
+            success: function (data) {
+                if (data) {
+                    listar();
+                } else {
+                    alert("Error al eliminar estudiante");
+                }
+                limpiarFormulario();
+            }
+        });
+    });
+
+    $("#editar").click(() => {
+        $.ajax({
+            url: urlApi + "?cedula=" + $("#cedula").val() + "&nombre=" + $("#nombre").val() + "&apellido=" + $("#apellido").val() + "&direccion=" + $("#direccion").val() + "&telefono=" + $("#telefono").val(),
+            method: "PUT",
+            dataType: "json",
+
+            success: function (data) {
+                if (data) {
+                    listar();
+                } else {
+                    alert("Error al editar estudiante");
+                }
+                limpiarFormulario();
+            }
         });
     });
 

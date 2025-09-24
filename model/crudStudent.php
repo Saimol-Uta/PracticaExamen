@@ -55,7 +55,7 @@ class CrudStudent {
         $direccion = $_GET["direccion"];
         $telefono = $_GET["telefono"];
 
-    $sqlUpdate = "UPDATE ESTUDIANTES SET  NOMBRE='$nombre', APELLIDO='$apellido', DIRECCION='$direccion', TELEFONO='$telefono' WHERE CEDULA='$cedula'";
+    $sqlUpdate = "UPDATE estudiantes SET  NOMBRE='$nombre', APELLIDO='$apellido', DIRECCION='$direccion', TELEFONO='$telefono' WHERE CEDULA='$cedula'";
 
         $resultado = $conn->prepare($sqlUpdate);
 
@@ -89,7 +89,7 @@ class CrudStudent {
 
         $cedula = $_GET["cedula"];
 
-        $quey = "DELETE FROM estudiante WHERE cedula = '$cedula'";
+        $quey = "DELETE FROM estudiantes WHERE cedula = '$cedula'";
 
         $res = $conn->prepare($quey);
         $res->execute();
